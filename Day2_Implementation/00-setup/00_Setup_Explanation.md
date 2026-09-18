@@ -1,37 +1,37 @@
-# Explicación del Entorno Base (00-setup)
+# Base Environment Setup Explanation (00-setup)
 
-Este documento detalla cada uno de los pasos ejecutados durante la fase inicial de configuración (Día 2) para preparar la infraestructura base necesaria antes de desplegar las APIs y las políticas de Kong.
+This document details each of the steps executed during the initial setup phase (Day 2) to prepare the required base infrastructure before deploying the APIs and Kong policies.
 
-## 1. Generación de Certificados mTLS (`generate_certs.sh`)
-Para que los Data Planes (nodos de ejecución de Kong) puedan conectarse de manera segura al Control Plane en Kong Konnect (SaaS), es estrictamente necesario establecer un túnel **mTLS** (Mutual TLS). 
-- El script itera sobre las 5 unidades de negocio (`credit_cards`, `loans`, `personal_banking`, `core`, `ai`).
-- Utiliza **OpenSSL** para generar una llave privada (`tls.key`) y un certificado autofirmado (`tls.crt`) válido por 10 años.
-- Los guarda en la carpeta local `certs/`. 
-- Estos certificados luego se "anclan" (Pinning) en la interfaz de Konnect y se inyectan en Kubernetes para que el Data Plane los use al arrancar.
+## 1. mTLS Certificate Generation (`generate_certs.sh`)
+For the Data Planes (Kong execution nodes) to securely connect to the Control Plane in Kong Konnect (SaaS), it is strictly necessary to establish an **mTLS** (Mutual TLS) tunnel.
+- The script iterates over the 5 business units (`credit_cards`, `loans`, `personal_banking`, `core`, `ai`).
+- It uses **OpenSSL** to generate a private key (`tls.key`) and a self-signed certificate (`tls.crt`) valid for 10 years.
+- It saves them in the local `certs/` folder.
+- These certificates are then "pinned" in the Konnect interface and injected into Kubernetes for the Data Plane to use upon startup.
 
-## 2. Configuración de Variables de Entorno (`setup_environment.sh`)
-El entorno de ejecución requiere variables críticas como las URLs de los Control Planes.
-- El script exporta las URLs del `cluster_control_plane` y `cluster_telemetry_endpoint` obtenidas desde Konnect para cada uno de los 5 Control Planes lógicos creados.
-- Exporta también el endpoint de observabilidad externa (`DECK_SIGNOZ_ENDPOINT`), apuntando a la IP de SigNoz.
-- Toda esta configuración se guarda en un archivo `.env` que luego es consumido por Terraform y Helm.
+## 2. Environment Variables Configuration (`setup_environment.sh`)
+The execution environment requires critical variables such as the Control Plane URLs.
+- The script exports the `cluster_control_plane` and `cluster_telemetry_endpoint` URLs obtained from Konnect for each of the 5 logical Control Planes created.
+- It also exports the external observability endpoint (`DECK_SIGNOZ_ENDPOINT`), pointing to the SigNoz IP.
+- All this configuration is saved in a `.env` file that is later consumed by Terraform and Helm.
 
-## 3. Despliegue de Keycloak (`setup_keycloak.sh`)
-Para manejar la identidad y seguridad de manera centralizada (Zero Trust):
-- Se levanta un contenedor de **Keycloak** usando Docker Compose (o se verifica su conexión dentro del clúster).
-- Se expone en el puerto `8080`.
-- Durante su inicialización, se carga un **Realm** llamado `kong` con clientes preconfigurados para demostrar el flujo de autenticación `client_credentials` utilizado en las llamadas Machine-to-Machine.
+## 3. Keycloak Deployment (`setup_keycloak.sh`)
+To handle identity and security centrally (Zero Trust):
+- A **Keycloak** container is spun up using Docker Compose (or its connection is verified inside the cluster).
+- It is exposed on port `8080`.
+- During initialization, a **Realm** named `kong` is loaded with preconfigured clients to demonstrate the `client_credentials` authentication flow used in Machine-to-Machine calls.
 
-## 4. Creación del Clúster y Pods (`deploy_local_k8s.sh`)
-Se simula el entorno productivo EKS utilizando Kubernetes local.
-1. **Namespaces:** El script crea 5 namespaces totalmente aislados (ej. `kong-dp-core`, `kong-dp-credit-cards`).
-2. **Secretos mTLS:** Inyecta los certificados creados en el paso 1 dentro de cada namespace usando `kubectl create secret tls`.
-3. **Despliegue Helm:** Usa el chart oficial de Kong (`kong/kong`) para desplegar los Data Planes. 
-   - Para las 4 unidades de negocio estándar, despliega la imagen `kong/kong-gateway:3.15.0.6`.
-   - Para el namespace `kong-dp-ai`, despliega la imagen especializada `kong/kong-ai-gateway:2.0.3`.
-   - A todos les inyecta las variables de entorno conectándolos a su respectivo Control Plane de Konnect.
-4. **Mockups & Testing:** Se despliegan pods auxiliares en el namespace por defecto: un contenedor `httpbin` que funciona como backend universal para todas las APIs de prueba, y un pod `test-curl-verify` que usamos luego para inyectar tráfico a la red.
+## 4. Cluster and Pods Creation (`deploy_local_k8s.sh`)
+The production EKS environment is simulated using local Kubernetes.
+1. **Namespaces:** The script creates 5 fully isolated namespaces (e.g., `kong-dp-core`, `kong-dp-credit-cards`).
+2. **mTLS Secrets:** It injects the certificates created in step 1 into each namespace using `kubectl create secret tls`.
+3. **Helm Deployment:** It uses the official Kong chart (`kong/kong`) to deploy the Data Planes.
+   - For the 4 standard business units, it deploys the `kong/kong-gateway:3.15.0.6` image.
+   - For the `kong-dp-ai` namespace, it deploys the specialized `kong/kong-ai-gateway:2.0.3` image.
+   - It injects environment variables into all of them, connecting them to their respective Konnect Control Plane.
+4. **Mockups & Testing:** Auxiliary pods are deployed in the default namespace: an `httpbin` container that acts as a universal backend for all test APIs, and a `test-curl-verify` pod that we later use to inject traffic into the network.
 
-## 5. Configuración de Red (Networking)
-- Todo el tráfico de los Data Planes hacia Konnect (CP) se enruta por el puerto `443` hacia el exterior, cifrado con el certificado propio del DP.
-- Los Data Planes exponen sus servicios de Proxy (el puerto donde reciben tráfico API) a través de un `LoadBalancer` o NodePort en Kubernetes.
-- Los servicios virtuales (`accounts`, `transactions`) mapean al backend en `http://httpbin.default.svc.cluster.local:8080` utilizando la resolución DNS interna (CoreDNS) de Kubernetes.
+## 5. Network Configuration
+- All traffic from the Data Planes to Konnect (CP) is routed outboard through port `443`, encrypted with the DP's own certificate.
+- The Data Planes expose their Proxy services (the port where they receive API traffic) through a Kubernetes `LoadBalancer` or NodePort.
+- The virtual services (`accounts`, `transactions`) map to the backend at `http://httpbin.default.svc.cluster.local:8080` using Kubernetes' internal DNS resolution (CoreDNS).
