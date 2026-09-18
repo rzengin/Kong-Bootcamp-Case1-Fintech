@@ -5,6 +5,7 @@ plugins:
     resource_attributes:
       service.name: RZE_kong_dp
       alumno_id: RZE
+      deployment.environment: workshop
     traces_endpoint: http://194.140.199.236:4318/v1/traces
     logs_endpoint: http://194.140.199.236:4318/v1/logs
     header_type: w3c

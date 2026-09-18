@@ -16,11 +16,11 @@
 
 ## 2. Review of Prior Assessment and Sizing (Simulation)
 - "Based on the commercial sizing we discussed and finalized last month, I wanted to quickly confirm the parameters of your **Kong Konnect** subscription to ensure we are completely aligned today:"
-  - **API Gateway:** You acquired a volume-based tier for **10 million monthly API Calls** and up to **5 Gateway Services**. This was calculated based on the traffic metrics you provided us for your 3 core APIs (Accounts, Payments, Transactions), leaving room for 2 additional microservices as you scale this year.
+  - **API Gateway:** You acquired a volume-based tier for **10 million monthly API Calls** and up to **10 Gateway Services**. This was calculated based on the traffic metrics you provided us for your 10 core APIs (Accounts, Transactions, Payments, Open Banking Consent, Loans, Card Issuance, Customer Onboarding, Fraud Analysis, Partner Statement, Support Chatbot).
   - **AI Gateway:** For your Fraud Analysis use case, the subscription includes the AI Gateway add-on sized for **1 million monthly AI Calls** (representing about 10% of your total API traffic requiring fraud checks) and exactly **2 AI Models**. This allows you to configure your primary cloud LLM provider and a secondary fallback or local model for resilience and cost-optimization.
   - **Included Modules:** All the enterprise-grade plugins we identified as critical are enabled: `rate-limiting-advanced` (for your partner tiers), `proxy-cache-advanced`, and access to the managed **Dev Portal** to securely expose your APIs.
 
-- "We have also mapped your acquired metrics: 10M API Calls/month, up to 5 Gateway Services, and 1M AI Calls/month across 2 AI Models. Everything is within bounds for your initial rollout."
+- "We have also mapped your acquired metrics: 10M API Calls/month, up to 10 Gateway Services, and 1M AI Calls/month across 2 AI Models. Everything is within bounds for your initial rollout."
 - "Since Konnect manages the Control Plane, you have the freedom to deploy as many nodes (Data Planes) as you need in your Kubernetes cluster to guarantee High Availability (HA) without any node-based licensing restrictions."
 
 ## 3. Support Onboarding and Customer Experience

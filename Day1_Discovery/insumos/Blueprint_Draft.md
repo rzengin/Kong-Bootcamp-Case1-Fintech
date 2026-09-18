@@ -212,7 +212,7 @@ Below are the answers to the discovery questions to better understand our archit
 
 ### 2. Traffic Management & Rate Limiting
 - **What are the expected traffic volumes for the Accounts, Payments, and Transactions APIs?**
-  We currently process around 10 million API calls per month across our 3 core APIs. For the new AI Fraud Analysis use cases, we estimate about 1 million monthly AI calls.
+  We currently process around 10 million API calls per month across our 10 core APIs. For the new AI Fraud Analysis use cases, we estimate about 1 million monthly AI calls.
 - **Do we need tiered rate limiting (e.g., Bronze, Silver, Gold) for different consumers (Internal Analytics vs. 3rd-party partners)?**
   Yes, we need to enforce strict Rate Limiting per consumer to prevent abuse. Also, our Accounts backend struggles with high read volume, so we need proxy-caching for at least 60 seconds.
 - **Are there any specific SLAs we need to enforce per consumer?**
@@ -220,7 +220,7 @@ Below are the answers to the discovery questions to better understand our archit
 
 ### 3. High Availability (HA) & Architecture
 - **What are the High Availability requirements for the Data Plane?**
-  We need the Gateway to comfortably handle the 10M+ volume and scale horizontally (up to 5 Gateway Services initially).
+  We need the Gateway to comfortably handle the 10M+ volume and scale horizontally (up to 10 Gateway Services initially).
 - **Will the deployment be multi-region, or single-region with multiple availability zones?**
   We have a hybrid environment. Core Banking remains on-premise, while new digital channels and microservices are hosted on AWS (EKS). We need 5 isolated Data Planes across these environments.
 - **Are there specific latency requirements we need to consider?**
