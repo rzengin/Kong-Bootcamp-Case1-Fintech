@@ -1,4 +1,4 @@
-# High-Level Architecture Proposal: Multi-BU Workspace Structure
+# High-Level Architecture Proposal: Multi-BU Control Plane Structure
 
 - **To:** Roberto Navarro, CTO - Fintech Global Banco
 - **From:** Ricardo Zengin (Perceptiva)
@@ -9,19 +9,19 @@ Based on our kickoff meeting and discovery session, here is the proposed high-le
 ## 1. Control Plane (Kong Konnect)
 The Control Plane will be hosted on Kong Konnect (SaaS). This provides a single pane of glass for all BUs without the operational overhead of managing the database (PostgreSQL) or control plane nodes.
 
-### Workspace Structure
-To guarantee autonomy and isolation, we will implement the following Workspace topology:
+### Control Plane Structure
+To guarantee autonomy and isolation, we will implement the following Control Plane topology:
 
-- **Global Workspace (Admin/Platform Team):** 
+- **Global Control Plane (Admin/Platform Team):** 
   - Manages global entities such as the Identity Provider (Keycloak/OIDC) configuration, global security plugins (e.g., WAF, global rate limits), and underlying infrastructure connections.
-- **BU1 Workspace: Credit Cards:**
+- **BU1 Control Plane: Credit Cards:**
   - Dedicated environment for the Credit Cards team to manage their routes, services, and local rate-limiting policies.
-- **BU2 Workspace: Loans:**
+- **BU2 Control Plane: Loans:**
   - Dedicated environment for the Loans team to manage origination and scoring APIs.
-- **BU3 Workspace: Personal Banking:**
+- **BU3 Control Plane: Personal Banking:**
   - Dedicated environment for the core banking integration APIs.
 
-*Security Note: Role-Based Access Control (RBAC) will strictly prevent the Credit Cards team from modifying or even viewing the configurations in the Loans Workspace.*
+*Security Note: Role-Based Access Control (RBAC) will strictly prevent the Credit Cards team from modifying or even viewing the configurations in the Loans Control Plane.*
 
 ## 2. Data Plane (Execution Layer)
 Since you operate in a hybrid cloud, Kong's Data Planes (DPs) will be deployed where the workloads reside. The DPs pull configurations securely from Konnect via mTLS.
