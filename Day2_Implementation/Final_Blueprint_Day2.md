@@ -1,134 +1,113 @@
+<div align="center">
+
 # Final Blueprint - Day 2: Architecture & Implementation Evolution
+### Global Fintech Company
+**Ricardo Zengin - Solutions Architect**<br>**Perceptiva (Kong Partner)**  
+*September 17, 2026*
+
+</div>
 
 ## Table of Contents
 
-- [Tabla de Contenidos](#tabla-de-contenidos)
-- [1. Hybrid Topology: Control Plane and Data Plane](#1-hybrid-topology-control-plane-and-data-plane)
-  - [Control Plane (Kong Konnect SaaS)](#control-plane-(kong-konnect-saas))
-  - [Data Plane (Provisioning and Deployment)](#data-plane-(provisioning-and-deployment))
-- [2. APIOps CI/CD Pipeline (Declarative Configuration)](#2-apiops-cicd-pipeline-(declarative-configuration))
-- [3. Mock Services Implementation](#3-mock-services-implementation)
-- [4. Centralized Security (OIDC and Keycloak)](#4-centralized-security-(oidc-and-keycloak))
-- [5. Advanced Traffic Management & Routing (PoC)](#5-advanced-traffic-management-&-routing-(poc))
-- [6. Smart AI Integration and Security (AI Gateway)](#6-smart-ai-integration-and-security-(ai-gateway))
-- [7. Web Application Firewall (WAF) and Advanced Security](#7-web-application-firewall-(waf)-and-advanced-security)
-- [8. Full Observability (OpenTelemetry & Signoz)](#8-full-observability-(opentelemetry-&-signoz))
-- [9. Infrastructure Automation (Terraform) and Developer Portal](#9-infrastructure-automation-(terraform)-and-developer-portal)
+  - [Global Fintech Company](#global-fintech-company)
+- [1. Introduction](#1-introduction)
+- [2. Business Alignment & Objectives](#2-business-alignment-&-objectives)
+  - [Current Landscape](#current-landscape)
+  - [Implemented State (Day 2)](#implemented-state-(day-2))
+- [3. Delivery Roadmap (12-Week Plan)](#3-delivery-roadmap-(12-week-plan))
+- [4. Principles](#4-principles)
+- [5. Technology Landscape and Solution Overview](#5-technology-landscape-and-solution-overview)
+  - [Architecture Diagram](#architecture-diagram)
+  - [Logical and Physical Topology](#logical-and-physical-topology)
+- [6. Certificates, Keys and Secrets](#6-certificates-keys-and-secrets)
+- [7. API Security and Access](#7-api-security-and-access)
+- [8. Observability](#8-observability)
+- [9. Platform Ops & API Ops](#9-platform-ops-&-api-ops)
+- [10. Developer Experience](#10-developer-experience)
+- [11. High Availability and Sizing](#11-high-availability-and-sizing)
+- [12. Kong Launch Playbook Alignment](#12-kong-launch-playbook-alignment)
   - [Evolution Summary](#evolution-summary)
 
 
 
-## Tabla de Contenidos
+## 1. Introduction
+The purpose of this document is to detail the evolution of the Initial Blueprint (Day 1), moving from the architectural proposal to the **real technical implementation** of the solution using Kong Konnect, Kubernetes, APIOps, and Terraform.
 
-- 1. Hybrid Topology: Control Plane and Data Plane
-  - Control Plane (Kong Konnect SaaS)
-  - Data Plane (Provisioning and Deployment)
-- 2. APIOps CI/CD Pipeline (Declarative Configuration)
-- 3. Mock Services Implementation
-- 4. Centralized Security (OIDC and Keycloak)
-- 5. Advanced Traffic Management & Routing (PoC)
-- 6. Smart AI Integration and Security (AI Gateway)
-- 7. Web Application Firewall (WAF) and Advanced Security
-- 8. Full Observability (OpenTelemetry & Signoz)
-- 9. Infrastructure Automation (Terraform) and Developer Portal
-  - Evolution Summary
+## 2. Business Alignment & Objectives
+### Current Landscape
+- Highly siloed operations between Credit Cards, Loans, and Personal Banking units.
+- Legacy core systems causing bottlenecks and high latency.
+- Security concerns regarding data exfiltration when using public LLMs for AI initiatives.
 
----
+### Implemented State (Day 2)
+- **Decentralized autonomy:** Each BU manages its own APIs via GitOps using `decK`.
+- **High performance:** Implemented caching strategies and isolated transactional vs. AI traffic at the Data Plane level.
+- **Zero-trust security:** Centralized OIDC with Keycloak for partners, and strict PII redaction using `ai-prompt-guard` for AI endpoints.
 
+## 3. Delivery Roadmap (12-Week Plan)
+*Roadmap for delivering a production-ready platform (Gantt Chart representation):*
 
+| Phase / Activity | Weeks 1-3 | Weeks 4-6 | Weeks 7-9 | Weeks 10-12 |
+| :--- | :---: | :---: | :---: | :---: |
+| **Discovery & Foundation** (Konnect, SSO, EKS) | 🟩 | | | |
+| **MVP Implementation** (Data Planes, OIDC, AI Proxy) | | 🟩 | | |
+| **APIOps & CI/CD** (GitOps, `decK`, Dev Portal) | | | 🟩 | |
+| **Go-Live & Shakedown** (Migration, Testing, Rollout) | | | | 🟩 |
 
-- **To:** Roberto Navarro, CTO - Fintech Global Banco
-- **From:** Ricardo Zengin (Perceptiva)
-- **Date:** September 17, 2026
+## 4. Principles
+- **Architecture principles:** Microservices architecture, elastic scaling, fault tolerance.
+- **Security principles:** Encrypt at rest and in transit, zero-trust for external consumers, protect LLM access.
 
-This document details the evolution of the Initial Blueprint (Day 1), moving from the architectural proposal to the **real technical implementation** of the solution using Kong Konnect, Kubernetes, APIOps, and Terraform.
+## 5. Technology Landscape and Solution Overview
 
----
+### Architecture Diagram
+![Architecture Diagram](media/cp_dp_topology.png)
 
-## 1. Hybrid Topology: Control Plane and Data Plane
+### Logical and Physical Topology
+- **Control Plane (Kong Konnect SaaS):** Multiple logical Control Planes configured for segmentation (`RZE-Core Banking`, `RZE-Credit Cards`, `RZE-Loans`, `RZE-Personal Banking`, `RZE-AI-Gateway-2.0`).
+- **Data Plane (Execution Layer):** 
+  - **Transactional Traffic:** Deployed via **Helm** in a Kubernetes cluster (Minikube).
+  - **AI Workload Isolation:** Deployed independently as a Standalone Docker Container to guarantee direct LLM access without Kubernetes networking bottlenecks.
 
-### Control Plane (Kong Konnect SaaS)
-Multiple logical **Control Planes** have been configured in Konnect to ensure segmentation for each Business Unit (BU) and the Core team:
-- `RZE-Core Banking`: Manages central services and global security.
-- `RZE-Credit Cards`: Isolated environment for Credit Card APIs.
-- `RZE-Loans`: Isolated environment for the Loans area.
-- `RZE-Personal Banking`: Isolated environment for Personal Banking.
-- `RZE-AI-Gateway-2.0`: Control Plane dedicated exclusively to handling Artificial Intelligence traffic (fraud, validations).
+## 6. Certificates, Keys and Secrets
+- **Certificates:** Each DP securely connects to its respective CP in Konnect using **mTLS** (anchored certificates locally generated by Terraform).
+- **Secrets Management:** Kong centralizes AI provider credentials (e.g., `OPENAI_API_KEY`) securely via Konnect's AI Gateway configurations, preventing leaks to end clients.
 
-### Data Plane (Provisioning and Deployment)
-To simulate the EKS production environment and isolate workloads, a mixed deployment strategy was used:
-- **Transactional Traffic (Minikube/Helm):** The Data Planes for Core Banking, Credit Cards, Loans, and Personal Banking were deployed using **Helm** within the Minikube cluster. Helm allows packaging and versioning of the infrastructure, guaranteeing identical and repeatable deployments. Unlike the Kong Ingress Controller (KIC) used to expose local services within Kubernetes using Ingress objects, here we use a native Kong deployment connected to Konnect (SaaS) where configurations are injected remotely via the mTLS tunnel, making it independent of Kubernetes manifests.
-- **AI Workload Isolation (Docker Container):** The specific Data Plane for Artificial Intelligence (AI Gateway) was deployed independently as a **Standalone Docker Container** on the host network. This ensures that traffic towards LLMs (like OpenAI) has direct internet access, avoiding network bottlenecks or DNS resolution issues (CoreDNS) within the Kubernetes cluster, and ensuring that the inherent latency of LLMs does not affect the bank's Core resources.
-- Each DP securely connects to its respective CP in Konnect using **mTLS** (anchored certificates locally generated by Terraform).
+## 7. API Security and Access
+- **Client Authentication:** OIDC (via Keycloak) implemented for Machine-to-Machine (`client_credentials`) flows in the Core Banking CP.
+- **Advanced Traffic Management:**
+  - **Rate Limiting Advanced:** Deployed in Credit Cards to protect `/transactions`.
+  - **Web Application Firewall (WAF):** Simulated via `ip-restriction` in Personal Banking.
+  - **Data Masking:** `request-transformer` implemented for obfuscating PCI-DSS sensitive data.
+- **AI Security:** `ai-prompt-guard` acts as a cognitive firewall blocking PII and injection attempts on the fly.
 
----
+## 8. Observability
+- **Native Telemetry:** The global `opentelemetry` plugin was activated declaratively.
+- **Backend:** Traces and metrics are exported directly to **Signoz**, allowing unified correlation of logs, metrics, and security blocks across all Data Planes in real-time.
 
-## 2. APIOps CI/CD Pipeline (Declarative Configuration)
+## 9. Platform Ops & API Ops
+- **GitOps Monorepo:** Configurations reside in `gitops-monorepo/kong-config/` organized by BU.
+- **Tooling:** `decK` (Declarative Configuration for Kong) is used to synchronize states (`deck gateway diff/sync`).
+- **Infrastructure Automation:** Terraform is used to provision Control Planes and the Developer Portal automatically (`main.tf`, `portal.tf`).
 
-The management of APIs, services, routes, and plugins is no longer manual. An **APIOps** workflow has been implemented:
-- **Main Tool:** `decK` (Declarative Configuration for Kong).
-- **Monorepo Structure:** All configurations reside in the `gitops-monorepo/kong-config/` repository, structured by directories according to the BU.
-- **Automation:** The `diff-and-apply.sh` script orchestrates the validation (`deck gateway diff`) and subsequent deployment (`deck gateway sync`) for all Control Planes. This process ensures that the Konnect environment always reflects the state declared in the Git repository.
+## 10. Developer Experience
+- **Developer Portal:** A unified Developer Portal (`RZE-FinTech-Portal`) was provisioned via Terraform.
+- **API Catalog Strategy:** 10 APIs were uploaded to the internal Next-Gen Catalog, but only authorized external APIs (e.g., Accounts, Transactions, Open Banking Consent) were exposed on the external portal for Fintech onboarding.
+- **Mock Services:** Local `httpbin` upstreams allow developers to test auth and rate-limiting policies predictably without hitting legacy backends.
 
----
+## 11. High Availability and Sizing
+- **Data Plane Isolation:** Transactional traffic and AI token processing are completely physically and logically separated to guarantee zero interference during traffic spikes.
+- **Canary Releases:** Upstreams were configured with multiple targets and weight-based routing to allow safe and progressive API deployments.
 
-## 3. Mock Services Implementation
+## 12. Kong Launch Playbook Alignment
+This Blueprint has been implemented adhering to the 6 core pillars of the Kong Launch Playbook MVP architecture:
 
-To enable development and testing without relying on the real Core backend, a universal mocking model was implemented:
-- **Upstream:** A local `httpbin` container was deployed.
-- **Routes and Services:** All exposed routes (`/accounts`, `/transactions`, `/loans`, etc.) point to `http://host.minikube.internal:8081` through the Kong Data Plane.
-- This allows testing policies (rate limiting, auth, caching) receiving successful and predictable responses.
-
----
-
-## 4. Centralized Security (OIDC and Keycloak)
-
-Access control has been modernized using **Keycloak** as the Identity Provider (IdP) deployed within the Kubernetes cluster.
-- **Implemented Flow:** Machine-to-machine authentication using `client_credentials` and passwords.
-- **Kong Plugin:** The `openid-connect` (OIDC) plugin was declaratively configured in the *Core Banking* CP, intercepting traffic towards sensitive routes (e.g., `/accounts`).
-- Kong validates the tokens and manages the session by delegating user and identity management to Keycloak, complying with the highest banking security standards.
-
----
-
-## 5. Advanced Traffic Management & Routing (PoC)
-
-To demonstrate Kong's enterprise capabilities, advanced routing and transformation policies were implemented:
-- **Rate Limiting Advanced:** Implemented in the *Credit Cards* BU on the `/transactions` route, using a local in-memory strategy to protect endpoints from abuse or DDoS attacks.
-- **Proxy Cache Advanced:** Configured in *Core Banking* to cache responses that do not change frequently, reducing the load on backend microservices.
-- **Canary Release:** Implemented in *Personal Banking*. An `upstream` was configured with multiple `targets` (V1 and V2) balancing traffic via weights (weight-based routing) to allow safe and progressive deployments without affecting all clients.
-- **Data Masking (Message Transformation):** Use of *Request Transformer* plugins in *Credit Cards* to mask or obfuscate sensitive data (e.g., credit card numbers) before sending them to the backend (mock), guaranteeing PCI-DSS compliance.
-
----
-
-## 6. Smart AI Integration and Security (AI Gateway)
-
-The use case for real-time fraud detection and validation supported by Generative AI was implemented:
-- **Request Flow:** Traffic enters the AI Gateway (deployed natively in Docker). The Gateway intercepts the conventional HTTP request and routes it semantically to the format expected by the AI provider.
-- **Provider and Routing (Semantic Routing 2.0):** Implementation of the new AI Gateway 2.0 architecture configured graphically from Konnect. Models and Providers (OpenAI) were defined by activating the "Chat Completions" capability. The Gateway exposes a semantic endpoint (e.g., `/ai/chat/chat/completions`) that mimics the original OpenAI API, abstracting the connection to the backend, but requiring clients to consume under open industry standards (avoiding vendor lock-in).
-- **Credentials Management:** Kong centralizes authentication, hiding API Keys (e.g., `OPENAI_API_KEY`) from the end client and injecting them securely at the Gateway level or referencing them in a secure vault (Secrets Vault).
-- **Security and Compliance (AI Prompt Guard):** The `ai-prompt-guard` policy was configured to act as a cognitive firewall. It analyzes prompts (request bodies) sent to AI models in real time, blocking injection attempts, offensive language, or data leakage (such as the use of passwords) returning an HTTP 400 before they reach the model, protecting the bank's sensitive data.
-
----
-
-## 7. Web Application Firewall (WAF) and Advanced Security
-
-To complement the Zero Trust strategy of OIDC, perimeter security was applied at the application layer:
-- **WAF and IP Filtering:** The `ip-restriction` plugin was enabled in the *Personal Banking* BU simulating WAF controls. This restricts access to critical APIs only from authorized IP ranges, significantly reducing the attack surface.
-
-## 8. Full Observability (OpenTelemetry & Signoz)
-
-Native telemetry was enabled to gain deep visibility into API behavior without instrumenting applications:
-- Archaic exporters were removed and the global `opentelemetry` plugin was activated across multiple BUs declaratively via `decK`.
-- The direct export connection to the external observability platform **Signoz** was configured (injecting secure variables into the manifests, e.g., `DECK_SIGNOZ_ENDPOINT`).
-- This allows correlating logs, metrics, and traces in a single dashboard in real time, observing latency times and security blocks.
-
----
-
-## 9. Infrastructure Automation (Terraform) and Developer Portal
-
-- **Developer Portal:** A unified Developer Portal was provisioned and exposed via the Konnect API for third-party onboarding.
-- **Infrastructure as Code (IaC):** Both the Control Planes and the Developer Portal, along with Certificate injection (for the Data Planes), were automated using **Terraform** (`portal.tf`, `main.tf`).
-- This eliminates human errors in base configuration and allows tearing down or replicating entire ecosystems (e.g., QA to Production environments) with a single `terraform apply` command.
+- **Resilient:** 5 distinct Control Planes and isolated Data Planes ensure complete traffic isolation.
+- **Reliable:** DB-less mode ensures Data Planes continue serving traffic even if connectivity to Konnect is lost.
+- **Observable:** Telemetry endpoints are fully configured and exported to Signoz.
+- **Well Architected:** Built on IaC (Terraform) and Declarative Configs (decK).
+- **Adheres to best practices:** 100% adoption of APIOps, completely eliminating manual UI configuration for APIs.
+- **Focuses on a small scope initial API:** The MVP successfully scoped Accounts, Transactions, and AI Fraud endpoints.
 
 ---
 
