@@ -37,7 +37,7 @@ A unified Developer Portal will be exposed through Konnect, but API visibility w
 To address the specific SLAs around latency and canary rollouts mentioned during discovery:
 
 ### Latency (< 15ms Overhead)
-- **Engine Performance:** Kong's core is built on NGINX and highly optimized C/Lua, designed specifically for sub-millisecond overhead. Even with multiple complex plugins enabled (OIDC, Rate Limiting), typical latency overhead remains between 1-3ms, well below the 15ms target.
+- **Engine Performance:** Kong's core is built on NGINX and highly optimized C/Lua, designed specifically for sub-millisecond overhead. Even with multiple complex plugins enabled (OIDC, Rate Limiting), typical latency overhead remains between 1-3ms, well below the 15ms target. This performance is formally backed by [Kong's Official Benchmarks](https://developer.konghq.com/gateway/performance/benchmarks/), which demonstrate industry-leading throughput and minimal latency overhead even under extreme loads.
 - **Topology:** By deploying the Data Planes locally within the same Kubernetes clusters (AWS EKS) as the backend services, we eliminate extra network hops. Traffic does not need to trombone through a centralized cloud gateway to be validated.
 
 ### Zero-Downtime (Canary) Deployments
