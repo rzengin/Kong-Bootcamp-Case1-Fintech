@@ -1,29 +1,81 @@
-flowchart TD
-    %% Kong Konnect SaaS (Control Planes)
-    subgraph CP [Kong Konnect SaaS Global Org]
-        CP1["Credit Cards Control Plane"]
-        CP2["Loans Control Plane"]
-        CP3["Personal Banking Control Plane"]
-        CP4["Core Control Plane"]
-        CP5["AI Control Plane"]
+flowchart TB
+    %% ========================================
+    %% KONG KONNECT SAAS - GLOBAL ORGANIZATION
+    %% ========================================
+    subgraph CP["☁ Kong Konnect SaaS - Global Org"]
+        direction LR
+
+        CP1["Credit Cards<br/>Control Plane"]
+        CP2["Loans<br/>Control Plane"]
+        CP3["Personal Banking<br/>Control Plane"]
+        CP4["Core<br/>Control Plane"]
+        CP5["AI<br/>Control Plane"]
     end
 
-    %% Kubernetes Data Planes (AWS EKS)
-    subgraph KDP_EKS [AWS EKS Data Planes Cloud]
-        DP_CC["DP: Credit Cards APIs"]
-        DP_Loans["DP: Loans APIs"]
-        DP_PB["DP: Personal Banking APIs"]
-        DP_AI["DP: AI Gateway 2.0 (Dedicated)"]
+    %% ========================================
+    %% DATA PLANES - AWS EKS CLOUD
+    %% ========================================
+    subgraph CLOUD["☸ AWS EKS Data Planes - Cloud"]
+        direction LR
+
+        subgraph CC_ZONE["Credit Cards"]
+            DP_CC["☸ DP: Credit Cards APIs"]
+        end
+
+        subgraph LOANS_ZONE["Loans"]
+            DP_Loans["☸ DP: Loans APIs"]
+        end
+
+        subgraph PB_ZONE["Personal Banking"]
+            DP_PB["☸ DP: Personal Banking APIs"]
+        end
+
+        subgraph AI_ZONE["AI Gateway"]
+            DP_AI["☸ DP: AI Gateway 2.0<br/>(Dedicated)"]
+        end
     end
 
-    %% On-Premise Data Plane (Legacy Core)
-    subgraph KDP_OnPrem [On-Premise Data Plane Datacenter]
-        DP_Core["DP: Core Banking APIs"]
+    %% ========================================
+    %% DATA PLANES - ON PREMISE
+    %% ========================================
+    subgraph ONPREM["▣ On-Premise Data Plane - Datacenter"]
+        direction TB
+
+        CORE_ZONE["Legacy Core Banking"]
+        DP_Core["☸ DP: Core Banking APIs"]
+
+        CORE_ZONE --> DP_Core
     end
 
-    %% Relationships (Konnect CP to Hybrid DPs)
-    CP1 -->|mTLS Sync| DP_CC
-    CP2 -->|mTLS Sync| DP_Loans
-    CP3 -->|mTLS Sync| DP_PB
-    CP4 -->|mTLS Sync| DP_Core
-    CP5 -->|mTLS Sync| DP_AI
+    %% ========================================
+    %% mTLS SYNCHRONIZATION
+    %% ========================================
+    CP1 -->|"mTLS Sync"| DP_CC
+    CP2 -->|"mTLS Sync"| DP_Loans
+    CP3 -->|"mTLS Sync"| DP_PB
+    CP4 -->|"mTLS Sync"| DP_Core
+    CP5 -->|"mTLS Sync"| DP_AI
+
+    %% ========================================
+    %% STYLES
+    %% ========================================
+    classDef control fill:#EAF2FF,stroke:#2563A6,stroke-width:1.5px,color:#163B67
+    classDef dataplane fill:#F4F8FF,stroke:#4285E8,stroke-width:1.5px,color:#163B67
+    classDef cloud fill:#EAF3FF,stroke:#7CB5F5,stroke-width:1px,color:#163B67
+    classDef onprem fill:#FFF6DF,stroke:#C9A64B,stroke-width:1px,color:#594512
+    classDef zone fill:#FFFFFF,stroke:#7CB5F5,stroke-width:1px,color:#163B67
+
+    class CP1,CP2,CP3,CP4,CP5 control
+    class DP_CC,DP_Loans,DP_PB,DP_AI,DP_Core dataplane
+    class CORE_ZONE zone
+
+    style CP fill:#FFF8E5,stroke:#C9A64B,stroke-width:1.5px
+    style CLOUD fill:#EDF5FF,stroke:#7CB5F5,stroke-width:1.5px
+    style ONPREM fill:#FFF8E5,stroke:#C9A64B,stroke-width:1.5px
+
+    style CC_ZONE fill:#F7FBFF,stroke:#A7C9F5,stroke-dasharray:5 5
+    style LOANS_ZONE fill:#F7FBFF,stroke:#A7C9F5,stroke-dasharray:5 5
+    style PB_ZONE fill:#F7FBFF,stroke:#A7C9F5,stroke-dasharray:5 5
+    style AI_ZONE fill:#F7FBFF,stroke:#A7C9F5,stroke-dasharray:5 5
+
+    linkStyle 0,1,2,3,4 stroke:#1677E8,stroke-width:2.5px,color:#1677E8

@@ -1,0 +1,28 @@
+_format_version: "3.0"
+services:
+- name: test-service
+  url: http://localhost:8000
+  routes:
+  - name: fallback-route
+    paths:
+    - /ai/fallback
+    plugins:
+    - name: ai-proxy
+      config:
+        route_type: llm/v1/chat
+        targets:
+        - weight: 100
+          route_type: llm/v1/chat
+          auth:
+            header_name: Authorization
+            header_value: Bearer sk-123
+          model:
+            provider: openai
+            name: gpt-4o
+        - weight: 50
+          route_type: llm/v1/chat
+          model:
+            provider: ollama
+            name: llama3
+            options:
+              upstream_url: http://ollama:11434
