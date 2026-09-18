@@ -1,18 +1,18 @@
 graph LR
     subgraph Requirements [Business & Technical Requirements]
         direction TB
-        R1[Decentralized Autonomy per BU]
-        R2[Zero-Trust Security & PII Protection]
-        R3[High Performance & Traffic Isolation]
-        R4[Scalability: 10M Tx/Mo, 10 APIs & 1M AI/Mo]
+        R1["Decentralized Autonomy per BU"]
+        R2["Zero-Trust Security & PII Protection"]
+        R3["High Performance & Traffic Isolation"]
+        R4["Scalability: 10M Tx/Mo, 10 APIs & 1M AI/Mo"]
     end
 
     subgraph Decisions [Architectural Decisions]
         direction TB
-        D1[Konnect SaaS (Multi-Control Plane) & GitOps CI/CD]
-        D2[OIDC Plugin, ai-proxy & ai-prompt-guard]
-        D3[5 Isolated Data Planes: 4 Standard + 1 AI Gateway 2.0]
-        D4[DB-less Mode on EKS with HPA Auto-scaling]
+        D1["Konnect SaaS (Multi-Control Plane) & GitOps CI/CD"]
+        D2["OIDC Plugin, ai-proxy & ai-prompt-guard"]
+        D3["5 Isolated Data Planes: 4 Standard + 1 AI Gateway 2.0"]
+        D4["DB-less Mode on EKS with HPA Auto-scaling"]
     end
 
     R1 -->|Solved by| D1
