@@ -4,6 +4,8 @@ flowchart TD
         CP1["Credit Cards Control Plane"]
         CP2["Loans Control Plane"]
         CP3["Personal Banking Control Plane"]
+        CP4["Core Control Plane"]
+        CP5["AI Control Plane"]
     end
 
     %% Kubernetes Data Planes (AWS EKS)
@@ -21,7 +23,7 @@ flowchart TD
 
     %% Relationships (Konnect CP to Hybrid DPs)
     CP1 -->|mTLS Sync| DP_CC
-    CP1 -->|mTLS Sync| DP_AI
     CP2 -->|mTLS Sync| DP_Loans
     CP3 -->|mTLS Sync| DP_PB
-    CP3 -->|mTLS Sync| DP_Core
+    CP4 -->|mTLS Sync| DP_Core
+    CP5 -->|mTLS Sync| DP_AI
