@@ -25,9 +25,9 @@ To handle identity and security centrally (Zero Trust):
 The production EKS environment is simulated using local Kubernetes.
 1. **Namespaces:** The script creates 5 fully isolated namespaces (e.g., `kong-dp-core`, `kong-dp-credit-cards`).
 2. **mTLS Secrets:** It injects the certificates created in step 1 into each namespace using `kubectl create secret tls`.
-3. **Helm Deployment:** It uses the official Kong chart (`kong/kong`) to deploy the Data Planes.
-   - For the 4 standard business units, it deploys the `kong/kong-gateway:3.15.0.6` image.
-   - For the `kong-dp-ai` namespace, it deploys the specialized `kong/kong-ai-gateway:2.0.3` image.
+3. **Helm & Docker Deployment:** It uses the official Kong chart (`kong/kong`) to deploy the Data Planes via Helm for standard BUs.
+   - For the 4 standard business units, it deploys the `kong/kong-gateway:3.15.0.6` image via Helm.
+   - For the AI Gateway (`kong-dp-ai`), it is deployed natively as a Docker container rather than using Helm, utilizing the specialized `kong/kong-ai-gateway:2.0.3` image.
    - It injects environment variables into all of them, connecting them to their respective Konnect Control Plane.
 4. **Mockups & Testing:** Auxiliary pods are deployed in the default namespace: an `httpbin` container that acts as a universal backend for all test APIs, and a `test-curl-verify` pod that we later use to inject traffic into the network.
 

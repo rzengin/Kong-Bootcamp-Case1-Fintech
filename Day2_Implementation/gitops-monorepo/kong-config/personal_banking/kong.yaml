@@ -1,27 +1,29 @@
-_format_version: "3.0"
+_format_version: '3.0'
 plugins:
-  - name: opentelemetry
-    config:
-      endpoint: ${{ env "DECK_SIGNOZ_ENDPOINT" }}
-      resource_attributes:
-        service.name: kong-api-gateway
-        deployment.environment: workshop
+- name: opentelemetry
+  config:
+    resource_attributes:
+      service.name: RZE_kong_dp
+      alumno_id: RZE
+    traces_endpoint: http://194.140.199.236:4318/v1/traces
+    logs_endpoint: http://194.140.199.236:4318/v1/logs
+    header_type: w3c
 upstreams:
-  - name: onboarding-upstream
-    targets:
-      - target: httpbin.default.svc.cluster.local:8080
-        weight: 100
+- name: onboarding-upstream
+  targets:
+  - target: httpbin.default.svc.cluster.local:8080
+    weight: 100
 services:
-  - name: personal-banking-service
-    url: http://onboarding-upstream
-    routes:
-      - name: personal-banking-route
-        paths:
-          - /personal-banking
-        plugins:
-          - name: ip-restriction
-            config:
-              allow:
-                - 127.0.0.1
-                - 192.168.0.0/16
-                - 10.0.0.0/8
+- name: personal-banking-service
+  url: http://onboarding-upstream
+  routes:
+  - name: personal-banking-route
+    paths:
+    - /personal-banking
+    plugins:
+    - name: ip-restriction
+      config:
+        allow:
+        - 127.0.0.1
+        - 192.168.0.0/16
+        - 10.0.0.0/8

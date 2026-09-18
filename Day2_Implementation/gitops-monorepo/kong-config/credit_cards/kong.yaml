@@ -1,32 +1,36 @@
-_format_version: "3.0"
+_format_version: '3.0'
 plugins:
-  - name: opentelemetry
-    config:
-      endpoint: ${{ env "DECK_SIGNOZ_ENDPOINT" }}
-      resource_attributes:
-        service.name: kong-api-gateway
-        deployment.environment: workshop
+- name: opentelemetry
+  config:
+    resource_attributes:
+      service.name: RZE_kong_dp
+      alumno_id: RZE
+    traces_endpoint: http://194.140.199.236:4318/v1/traces
+    logs_endpoint: http://194.140.199.236:4318/v1/logs
+    header_type: w3c
 services:
-  - name: transactions-service
-    url: http://httpbin.default.svc.cluster.local:8080/anything
-    routes:
-      - name: transactions-route
-        paths:
-          - /transactions
-        plugins:
-          - name: rate-limiting-advanced
-            config:
-              limit: [5]
-              window_size: [60]
-              namespace: rla_credit_cards
-              strategy: local
-          - name: response-transformer
-            config:
-              remove:
-                headers:
-                  - x-powered-by
-          - name: request-transformer
-            config:
-              replace:
-                headers:
-                  - "X-Credit-Card:****-****-****-****"
+- name: transactions-service
+  url: http://httpbin.default.svc.cluster.local:8080/anything
+  routes:
+  - name: transactions-route
+    paths:
+    - /transactions
+    plugins:
+    - name: rate-limiting-advanced
+      config:
+        limit:
+        - 5
+        window_size:
+        - 60
+        namespace: rla_credit_cards
+        strategy: local
+    - name: response-transformer
+      config:
+        remove:
+          headers:
+          - x-powered-by
+    - name: request-transformer
+      config:
+        replace:
+          headers:
+          - X-Credit-Card:****-****-****-****

@@ -1,40 +1,40 @@
-_format_version: "3.0"
+_format_version: '3.0'
 services:
-  - name: ai-chat-service
-    url: http://localhost:8000
-    routes:
-      - name: openai-chat-route
-        paths:
-          - /ai/chat
-        plugins:
-          - name: ai-proxy
-            config:
-              route_type: llm/v1/chat
-              auth:
-                header_name: Authorization
-                header_value: Bearer sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-              model:
-                provider: openai
-                name: gpt-4o
-                options:
-                  max_tokens: 512
-                  temperature: 0.7
-          - name: ai-prompt-guard
-            config:
-              allow_all_conversation_history: true
-              deny_patterns:
-                - "(?i)password"
-                - "(?i)ssn"
-                - "(?i)credit card"
-      - name: ollama-local-route
-        paths:
-          - /ai/local
-        plugins:
-          - name: ai-proxy
-            config:
-              route_type: llm/v1/chat
-              model:
-                provider: ollama
-                name: llama3
-                options:
-                  upstream_url: http://ollama-ollama.default.svc.cluster.local:11434
+- name: ai-chat-service
+  url: http://localhost:8000
+  routes:
+  - name: openai-chat-route
+    paths:
+    - /ai/chat
+    plugins:
+    - name: ai-proxy
+      config:
+        route_type: llm/v1/chat
+        auth:
+          header_name: Authorization
+          header_value: Bearer sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        model:
+          provider: openai
+          name: gpt-4o
+          options:
+            max_tokens: 512
+            temperature: 0.7
+    - name: ai-prompt-guard
+      config:
+        allow_all_conversation_history: true
+        deny_patterns:
+        - (?i)password
+        - (?i)ssn
+        - (?i)credit card
+  - name: ollama-local-route
+    paths:
+    - /ai/local
+    plugins:
+    - name: ai-proxy
+      config:
+        route_type: llm/v1/chat
+        model:
+          provider: ollama
+          name: llama3
+          options:
+            upstream_url: http://ollama-ollama.default.svc.cluster.local:11434
