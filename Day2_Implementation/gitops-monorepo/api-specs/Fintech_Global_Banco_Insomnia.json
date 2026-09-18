@@ -1,0 +1,347 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-09-18T00:05:29.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.0",
+  "resources": [
+    {
+      "_id": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "parentId": null,
+      "modified": 1789700729345,
+      "created": 1789700729345,
+      "name": "Fintech Global Banco APIs",
+      "description": "Complete collection for all Top 10 APIs",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_ce71c077385546dda4d8305433219aea",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729345,
+      "created": 1789700729345,
+      "name": "Base Environment",
+      "data": {
+        "kong_url": "http://localhost:8000"
+      },
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_f17cdc51ebb5442eb1cb754ab60cdcc8",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729346,
+      "created": 1789700729346,
+      "name": "Accounts API",
+      "description": "Core Banking API for retrieving account details.",
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_70334c3ddf704376bb661091bcc096fb",
+      "parentId": "fld_f17cdc51ebb5442eb1cb754ab60cdcc8",
+      "modified": 1789700729346,
+      "created": 1789700729346,
+      "url": "{{ _.kong_url }}/accounts",
+      "name": "List all accounts for the authenticated user",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "_type": "request"
+    },
+    {
+      "_id": "req_a9b6b7f4078949b1a2981122fd987a10",
+      "parentId": "fld_f17cdc51ebb5442eb1cb754ab60cdcc8",
+      "modified": 1789700729346,
+      "created": 1789700729346,
+      "url": "{{ _.kong_url }}/accounts/{accountId}",
+      "name": "Get details of a specific account",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "_type": "request"
+    },
+    {
+      "_id": "fld_f2f28ae410444637887b0c820cf4c996",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729347,
+      "created": 1789700729347,
+      "name": "Card Issuance API",
+      "description": "API for Credit Card issuance and management.",
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_b051ac8677a642ec9218031b75384d91",
+      "parentId": "fld_f2f28ae410444637887b0c820cf4c996",
+      "modified": 1789700729347,
+      "created": 1789700729347,
+      "url": "{{ _.kong_url }}/cards/issue",
+      "name": "Request the issuance of a new credit card",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "_type": "request"
+    },
+    {
+      "_id": "fld_ec73962080544ce68ac6c1e11d542132",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729348,
+      "created": 1789700729348,
+      "name": "Customer Onboarding API",
+      "description": "API for creating new customer profiles.",
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_b1c590a687a642d984d6485e351f354d",
+      "parentId": "fld_ec73962080544ce68ac6c1e11d542132",
+      "modified": 1789700729348,
+      "created": 1789700729348,
+      "url": "{{ _.kong_url }}/customers/onboard",
+      "name": "Onboard a new customer",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "_type": "request"
+    },
+    {
+      "_id": "fld_2bb3920f94f44f86a0d03fde06ea53a1",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729349,
+      "created": 1789700729349,
+      "name": "Internal Fraud Analysis API",
+      "description": "AI Gateway endpoint routing to a local Llama model for fraud scoring.",
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_8f922a42d5964139a7864811954b759a",
+      "parentId": "fld_2bb3920f94f44f86a0d03fde06ea53a1",
+      "modified": 1789700729349,
+      "created": 1789700729349,
+      "url": "{{ _.kong_url }}/ai/fraud-score",
+      "name": "Request a fraud analysis score for a transaction",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "_type": "request"
+    },
+    {
+      "_id": "fld_3e781ca4417242d59c641e942716b722",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729350,
+      "created": 1789700729350,
+      "name": "Loan Origination API",
+      "description": "API for loan applications and status tracking.",
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_117ffdbd5b344e92b69dbff49ffa0f27",
+      "parentId": "fld_3e781ca4417242d59c641e942716b722",
+      "modified": 1789700729350,
+      "created": 1789700729350,
+      "url": "{{ _.kong_url }}/loans/apply",
+      "name": "Apply for a new loan",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "_type": "request"
+    },
+    {
+      "_id": "fld_df94020b514d4c2180aa217153a7fca4",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729351,
+      "created": 1789700729351,
+      "name": "Open Banking Consent API",
+      "description": "API for managing customer consent for third-party access.",
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_33915447020949f88b9d9c21cfd372b1",
+      "parentId": "fld_df94020b514d4c2180aa217153a7fca4",
+      "modified": 1789700729351,
+      "created": 1789700729351,
+      "url": "{{ _.kong_url }}/consent",
+      "name": "Create a consent record",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "_type": "request"
+    },
+    {
+      "_id": "fld_3596867fa141469a99fd63fee119b78e",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729352,
+      "created": 1789700729352,
+      "name": "Partner Statement Generation API",
+      "description": "GraphQL API wrapper for generating heavy statements.",
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_231197c13a8d450cbd07879506463851",
+      "parentId": "fld_3596867fa141469a99fd63fee119b78e",
+      "modified": 1789700729352,
+      "created": 1789700729352,
+      "url": "{{ _.kong_url }}/statements",
+      "name": "GraphQL endpoint for statement generation",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "_type": "request"
+    },
+    {
+      "_id": "fld_ba0436ee28954b52a0880eb28b10973e",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729353,
+      "created": 1789700729353,
+      "name": "Payments API",
+      "description": "API for initiating payments and transfers.",
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_fd5fccb39be348f088473f24d932c0d3",
+      "parentId": "fld_ba0436ee28954b52a0880eb28b10973e",
+      "modified": 1789700729353,
+      "created": 1789700729353,
+      "url": "{{ _.kong_url }}/payments",
+      "name": "Initiate a new payment",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "_type": "request"
+    },
+    {
+      "_id": "fld_8370a36c651444b88e9bf7478a302081",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729354,
+      "created": 1789700729354,
+      "name": "Customer Support Chatbot API",
+      "description": "AI Gateway endpoint routing to OpenAI.",
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_166255ad14e74a1fa5cf412b3ea5982d",
+      "parentId": "fld_8370a36c651444b88e9bf7478a302081",
+      "modified": 1789700729354,
+      "created": 1789700729354,
+      "url": "{{ _.kong_url }}/ai/support-chat",
+      "name": "Send a prompt to the AI support chatbot",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "_type": "request"
+    },
+    {
+      "_id": "fld_126fe6b863484ed3b6da5b940996340b",
+      "parentId": "wrk_766d691c55054eb199a2a093c84dd77d",
+      "modified": 1789700729355,
+      "created": 1789700729355,
+      "name": "Transactions API",
+      "description": "API for retrieving transaction history.",
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_c80c571a02f5471eaaca9212f82ba029",
+      "parentId": "fld_126fe6b863484ed3b6da5b940996340b",
+      "modified": 1789700729355,
+      "created": 1789700729355,
+      "url": "{{ _.kong_url }}/transactions",
+      "name": "List transactions for a given account",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "_type": "request"
+    }
+  ]
+}
