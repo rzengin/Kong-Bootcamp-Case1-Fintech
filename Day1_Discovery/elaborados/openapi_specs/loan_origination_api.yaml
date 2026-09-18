@@ -1,0 +1,36 @@
+openapi: 3.0.0
+info:
+  title: Loan Origination API
+  version: 1.0.0
+  description: API for loan applications and status tracking.
+servers:
+  - url: https://api.fintechglobal.com/v1
+paths:
+  /loans/apply:
+    post:
+      summary: Apply for a new loan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                requestedAmount:
+                  type: number
+                termMonths:
+                  type: integer
+      responses:
+        '201':
+          description: Loan application submitted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  applicationId:
+                    type: string
+                  status:
+                    type: string

@@ -1,0 +1,38 @@
+openapi: 3.0.0
+info:
+  title: Customer Onboarding API
+  version: 1.0.0
+  description: API for creating new customer profiles.
+servers:
+  - url: https://api.fintechglobal.com/v1
+paths:
+  /customers/onboard:
+    post:
+      summary: Onboard a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                nationalId:
+                  type: string
+      responses:
+        '201':
+          description: Customer onboarded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customerId:
+                    type: string
+                  status:
+                    type: string

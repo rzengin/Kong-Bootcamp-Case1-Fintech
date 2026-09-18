@@ -1,0 +1,36 @@
+openapi: 3.0.0
+info:
+  title: Partner Statement Generation API
+  version: 1.0.0
+  description: GraphQL API wrapper for generating heavy statements.
+servers:
+  - url: https://api.fintechglobal.com/v1
+paths:
+  /statements:
+    post:
+      summary: GraphQL endpoint for statement generation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+      responses:
+        '200':
+          description: GraphQL Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                  errors:
+                    type: array
+                    items:
+                      type: object

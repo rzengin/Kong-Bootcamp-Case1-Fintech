@@ -1,0 +1,274 @@
+# Maturity: beta
+
+ai_gateways:
+  - ref: my-resource
+    model_providers:
+      - ref: my-resource
+        display_name: AI Model Provider
+        name: openai-provider
+        # labels: {}
+        # managed_by: {}
+        # oneOf option: type=openai
+        config:
+          auth:
+            headers:
+              - name: Authorization
+                value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            type: basic
+        type: openai
+        # oneOf option: type=azure
+        # config:
+          # auth:
+            # oneOf option: type=basic
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+            # oneOf option: type=azure
+            # client_id: value
+            # client_secret: !secret {source: !env AZURE_CLIENT_SECRET}
+            # tenant_id: value
+            # use_managed_identity: false
+            # type: azure
+          # service: value
+          # instance: value
+          # foundry:
+            # resource: value
+            # domain: value
+        # type: azure
+        # oneOf option: type=bedrock
+        # config:
+          # auth:
+            # oneOf option: type=basic
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+            # oneOf option: type=aws
+            # access_key_id: value
+            # secret_access_key: !secret {source: !env AWS_SECRET_ACCESS_KEY}
+            # session_token: value
+            # assume_role_arn: value
+            # role_session_name: value
+            # sts_endpoint_url: value
+            # batch_role_arn: value
+            # type: aws
+        # type: bedrock
+        # oneOf option: type=cerebras
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: cerebras
+        # oneOf option: type=cohere
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: cohere
+        # oneOf option: type=dashscope
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: dashscope
+        # oneOf option: type=databricks
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: databricks
+        # oneOf option: type=deepseek
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: deepseek
+        # oneOf option: type=gemini
+        # config:
+          # auth:
+            # oneOf option: type=basic
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+            # oneOf option: type=gcp
+            # service_account_json: !secret {source: !env GCP_SERVICE_ACCOUNT_JSON}
+            # metadata_url: value
+            # oauth_token_url: value
+            # use_gcp_service_account: false
+            # type: gcp
+        # type: gemini
+        # oneOf option: type=huggingface
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: huggingface
+        # oneOf option: type=kimi
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: kimi
+        # oneOf option: type=llama2
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: llama2
+        # oneOf option: type=mistral
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: mistral
+        # oneOf option: type=ollama
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: ollama
+        # oneOf option: type=anthropic
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: anthropic
+        # oneOf option: type=vercel
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: vercel
+        # oneOf option: type=vllm
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: vllm
+        # oneOf option: type=xai
+        # config:
+          # auth:
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+        # type: xai
+        # oneOf option: type=sagemaker
+        # config:
+          # auth:
+            # oneOf option: type=basic
+            # headers:
+              # - name: Authorization
+                # value: !secret {parts: ["Bearer ", !env MODEL_PROVIDER_API_KEY]}
+            # params:
+              # - name: my-resource
+                # value: value
+                # location: value
+            # type: basic
+            # oneOf option: type=sagemaker
+            # type: sagemaker
+            # aws:
+              # access_key_id: value
+              # secret_access_key: !secret {source: !env AWS_SECRET_ACCESS_KEY}
+              # session_token: value
+        # type: sagemaker

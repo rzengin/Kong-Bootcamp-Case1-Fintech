@@ -1,0 +1,44 @@
+#!/bin/bash
+# Script to run Kong AI Gateway as a Docker container using the new Konnect AI Gateway UI configurations
+
+echo "Stopping any existing AI Gateway container..."
+docker rm -f kong-ai-gateway > /dev/null 2>&1 || true
+
+echo "Starting AI Gateway container connected to Konnect AI Gateway 2.0 (UI)..."
+docker run -d --name kong-ai-gateway --dns 8.8.8.8 \
+-e "KONG_ROLE=data_plane" \
+-e "KONG_DATABASE=off" \
+-e "KONG_VITALS=off" \
+-e "KONG_CLUSTER_MTLS=pki" \
+-e "KONG_CLUSTER_CONTROL_PLANE=967fcc6c48.us.cp.konghq.com:443" \
+-e "KONG_CLUSTER_SERVER_NAME=967fcc6c48.us.cp.konghq.com" \
+-e "KONG_CLUSTER_TELEMETRY_ENDPOINT=967fcc6c48.us.tp.konghq.com:443" \
+-e "KONG_CLUSTER_TELEMETRY_SERVER_NAME=967fcc6c48.us.tp.konghq.com" \
+-e "KONG_CLUSTER_CERT=-----BEGIN CERTIFICATE-----
+MIICMTCCAdigAwIBAgIBATAKBggqhkjOPQQDBDBKMUgwCQYDVQQGEwJVUzA7BgNV
+BAMeNABrAG8AbgBuAGUAYwB0AC0AcgB6AGUALQBhAGkALQBnAGEAdABlAHcAYQB5
+AC0AMgAtADAwHhcNMjYwOTE3MjIyMTE0WhcNMzYwOTE3MjIyMTE0WjBKMUgwCQYD
+VQQGEwJVUzA7BgNVBAMeNABrAG8AbgBuAGUAYwB0AC0AcgB6AGUALQBhAGkALQBn
+AGEAdABlAHcAYQB5AC0AMgAtADAwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARM
+yvGA8CcfTyHden6cbwU1qZE7jzXjo5/V+mv567J15clsAHvXBZep6PxEFX5FJ1q5
++O0/sCnMNzMJcIsng3/0o4GuMIGrMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgAG
+MB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAXBgkrBgEEAYI3FAIECgwI
+Y2VydFR5cGUwIwYJKwYBBAGCNxUCBBYEFAEBAQEBAQEBAQEBAQEBAQEBAQEBMBwG
+CSsGAQQBgjcVBwQPMA0GBSkBAQEBAgEKAgEUMBMGCSsGAQQBgjcVAQQGAgQAFAAK
+MAoGCCqGSM49BAMEA0cAMEQCIHF96zzYtEyYN91owHtNGmqltm3rnTGvJ+np8EYU
+p13VAiAZ2Tn7fiziYRHZA+bJWfFNesVnSszUUr2wX4GLij1h+g==
+-----END CERTIFICATE-----" \
+-e "KONG_CLUSTER_CERT_KEY=-----BEGIN PRIVATE KEY-----
+MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgW3mitdcl3Hv8AALD
+K+HXZ8MCxTkMwVzOSfvcPb0Pp3CgCgYIKoZIzj0DAQehRANCAARMyvGA8CcfTyHd
+en6cbwU1qZE7jzXjo5/V+mv567J15clsAHvXBZep6PxEFX5FJ1q5+O0/sCnMNzMJ
+cIsng3/0
+-----END PRIVATE KEY-----" \
+-e "KONG_LUA_SSL_TRUSTED_CERTIFICATE=system" \
+-e "KONG_KONNECT_MODE=on" \
+-e "KONG_PLUGINS=bundled,ai-proxy,ai-prompt-guard" \
+-p 8000:8000 \
+-p 8443:8443 \
+kong/kong-ai-gateway:2.0.3
+
+echo "AI Gateway started successfully!"

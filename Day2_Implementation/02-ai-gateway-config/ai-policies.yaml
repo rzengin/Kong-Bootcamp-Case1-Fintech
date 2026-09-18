@@ -1,0 +1,14 @@
+# Maturity: beta
+
+ai_gateways:
+  - ref: my-resource
+    policies:
+      - ref: my-resource
+        name: mask-sensitive-data
+        type: ai-sanitizer
+        display_name: Mask Sensitive Data
+        enabled: true
+        global: false
+        config: {}
+        # labels: {}
+        # managed_by: {}

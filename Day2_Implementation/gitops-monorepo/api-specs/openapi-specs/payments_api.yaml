@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  title: Payments API
+  version: 1.0.0
+  description: API for initiating payments and transfers.
+servers:
+  - url: https://api.fintechglobal.com/v1
+paths:
+  /payments:
+    post:
+      summary: Initiate a new payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sourceAccountId:
+                  type: string
+                destinationAccountId:
+                  type: string
+                amount:
+                  type: number
+                currency:
+                  type: string
+      responses:
+        '201':
+          description: Payment initiated successfully
+        '400':
+          description: Invalid request

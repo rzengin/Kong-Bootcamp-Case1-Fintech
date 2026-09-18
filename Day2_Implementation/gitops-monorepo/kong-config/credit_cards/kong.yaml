@@ -1,0 +1,32 @@
+_format_version: "3.0"
+plugins:
+  - name: opentelemetry
+    config:
+      endpoint: ${{ env "DECK_SIGNOZ_ENDPOINT" }}
+      resource_attributes:
+        service.name: kong-api-gateway
+        deployment.environment: workshop
+services:
+  - name: transactions-service
+    url: http://httpbin.default.svc.cluster.local:8080/anything
+    routes:
+      - name: transactions-route
+        paths:
+          - /transactions
+        plugins:
+          - name: rate-limiting-advanced
+            config:
+              limit: [5]
+              window_size: [60]
+              namespace: rla_credit_cards
+              strategy: local
+          - name: response-transformer
+            config:
+              remove:
+                headers:
+                  - x-powered-by
+          - name: request-transformer
+            config:
+              replace:
+                headers:
+                  - "X-Credit-Card:****-****-****-****"

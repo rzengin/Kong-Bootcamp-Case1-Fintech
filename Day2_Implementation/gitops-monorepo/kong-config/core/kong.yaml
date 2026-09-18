@@ -1,0 +1,35 @@
+_format_version: "3.0"
+plugins:
+  - name: opentelemetry
+    config:
+      endpoint: ${{ env "DECK_SIGNOZ_ENDPOINT" }}
+      resource_attributes:
+        service.name: kong-api-gateway
+        deployment.environment: workshop
+services:
+  - name: accounts-service
+    url: http://httpbin.default.svc.cluster.local:8080/anything
+    routes:
+      - name: accounts-route
+        paths:
+          - /accounts
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: memory
+              memory:
+                dictionary_name: kong_db_cache
+              cache_ttl: 300
+          - name: openid-connect
+            config:
+              issuer: "http://keycloak.default.svc.cluster.local:8080/realms/master"
+              client_id:
+                - "kong"
+              client_secret:
+                - "secret"
+              session_secret: "my_secret_session_key"
+              cache_tokens_salt: "my_secret_salt"
+              auth_methods:
+                - password
+                - client_credentials
+                - bearer

@@ -1,0 +1,50 @@
+# Helm Values for Kong Data Plane (Konnect DP)
+# Used for testing the Kubernetes architecture via Docker Desktop Kubernetes
+
+env:
+  role: data_plane
+  database: "off"
+  cluster_mtls: pki
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+  trusted_ips: "0.0.0.0/0,::/0"
+  real_ip_header: "X-Forwarded-For"
+  real_ip_recursive: "on"
+
+secretVolumes:
+  - kong-cluster-cert
+
+proxy:
+  type: LoadBalancer
+  http:
+    enabled: true
+    port: 8000
+    targetPort: 8000
+  tls:
+    enabled: true
+    port: 8443
+    targetPort: 8443
+
+admin:
+  enabled: false
+
+ingressController:
+  enabled: false
+  installCRDs: false
+
+manager:
+  enabled: false
+
+portal:
+  enabled: false
+
+portalapi:
+  enabled: false
+
+# Autoscaling matches the Blueprint requirement
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80

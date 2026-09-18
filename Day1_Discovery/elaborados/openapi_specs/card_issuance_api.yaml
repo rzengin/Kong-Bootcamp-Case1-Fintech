@@ -1,0 +1,34 @@
+openapi: 3.0.0
+info:
+  title: Card Issuance API
+  version: 1.0.0
+  description: API for Credit Card issuance and management.
+servers:
+  - url: https://api.fintechglobal.com/v1
+paths:
+  /cards/issue:
+    post:
+      summary: Request the issuance of a new credit card
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                cardType:
+                  type: string
+      responses:
+        '201':
+          description: Card issued successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cardNumberMasked:
+                    type: string
+                  status:
+                    type: string

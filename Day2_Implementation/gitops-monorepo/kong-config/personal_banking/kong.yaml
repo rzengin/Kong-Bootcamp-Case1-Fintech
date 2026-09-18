@@ -1,0 +1,27 @@
+_format_version: "3.0"
+plugins:
+  - name: opentelemetry
+    config:
+      endpoint: ${{ env "DECK_SIGNOZ_ENDPOINT" }}
+      resource_attributes:
+        service.name: kong-api-gateway
+        deployment.environment: workshop
+upstreams:
+  - name: onboarding-upstream
+    targets:
+      - target: httpbin.default.svc.cluster.local:8080
+        weight: 100
+services:
+  - name: personal-banking-service
+    url: http://onboarding-upstream
+    routes:
+      - name: personal-banking-route
+        paths:
+          - /personal-banking
+        plugins:
+          - name: ip-restriction
+            config:
+              allow:
+                - 127.0.0.1
+                - 192.168.0.0/16
+                - 10.0.0.0/8

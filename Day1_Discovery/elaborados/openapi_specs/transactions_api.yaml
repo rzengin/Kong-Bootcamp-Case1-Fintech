@@ -1,0 +1,36 @@
+openapi: 3.0.0
+info:
+  title: Transactions API
+  version: 1.0.0
+  description: API for retrieving transaction history.
+servers:
+  - url: https://api.fintechglobal.com/v1
+paths:
+  /transactions:
+    get:
+      summary: List transactions for a given account
+      parameters:
+        - in: query
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    transactionId:
+                      type: string
+                    amount:
+                      type: number
+                    status:
+                      type: string
+                    date:
+                      type: string
+                      format: date-time

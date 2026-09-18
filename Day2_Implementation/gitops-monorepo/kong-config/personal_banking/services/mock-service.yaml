@@ -1,0 +1,18 @@
+_format_version: "3.0"
+_info:
+  select_tags:
+    - personal_banking
+
+services:
+  - name: pb-mock-onboarding-service
+    url: http://localhost:8080 # This upstream doesn't matter, mocking overrides it
+    routes:
+      - name: pb-mock-route
+        paths:
+          - /v1/personal-banking/mock-onboarding
+        plugins:
+          - name: request-termination
+            config:
+              status_code: 200
+              content_type: application/json
+              body: '{"status": "success", "message": "Mock response for unavailable onboarding upstream.", "partner_status": "PENDING_VERIFICATION"}'

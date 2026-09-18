@@ -1,0 +1,21 @@
+2026-09-17T23:32:55.863-0300 [INFO]  Terraform version: 1.5.7
+2026-09-17T23:32:55.863-0300 [DEBUG] using github.com/hashicorp/go-tfe v1.26.0
+2026-09-17T23:32:55.863-0300 [DEBUG] using github.com/hashicorp/hcl/v2 v2.16.2
+2026-09-17T23:32:55.863-0300 [DEBUG] using github.com/hashicorp/terraform-svchost v0.1.0
+2026-09-17T23:32:55.863-0300 [DEBUG] using github.com/zclconf/go-cty v1.12.2
+2026-09-17T23:32:55.863-0300 [INFO]  Go runtime version: go1.23.1
+2026-09-17T23:32:55.863-0300 [INFO]  CLI args: []string{"terraform", "refresh", "-target=konnect_catalog_service.accounts_api", "-var", "cp_core_id=dummy", "-var", "cp_dp_id=dummy", "-var", "portal_id=dummy"}
+2026-09-17T23:32:55.863-0300 [DEBUG] Attempting to open CLI config file: /Users/rzengin/.terraformrc
+2026-09-17T23:32:55.863-0300 [DEBUG] File doesn't exist, but doesn't need to. Ignoring.
+2026-09-17T23:32:55.864-0300 [DEBUG] ignoring non-existing provider search directory terraform.d/plugins
+2026-09-17T23:32:55.864-0300 [DEBUG] ignoring non-existing provider search directory /Users/rzengin/.terraform.d/plugins
+2026-09-17T23:32:55.864-0300 [DEBUG] ignoring non-existing provider search directory /Users/rzengin/Library/Application Support/io.terraform/plugins
+2026-09-17T23:32:55.864-0300 [DEBUG] ignoring non-existing provider search directory /Library/Application Support/io.terraform/plugins
+2026-09-17T23:32:55.865-0300 [INFO]  CLI command args: []string{"refresh", "-target=konnect_catalog_service.accounts_api", "-var", "cp_core_id=dummy", "-var", "cp_dp_id=dummy", "-var", "portal_id=dummy"}
+2026-09-17T23:32:55.869-0300 [DEBUG] New state was assigned lineage "61987796-7754-f077-de45-1d1500bc956a"
+2026-09-17T23:32:55.902-0300 [DEBUG] checking for provisioner in "."
+2026-09-17T23:32:55.903-0300 [DEBUG] checking for provisioner in "/opt/homebrew/bin"
+2026-09-17T23:32:55.912-0300 [DEBUG] backend/local: will prompt for input of unset required variables [svc_accounts_id cp_credit_cards_id cp_loans_id svc_credit_accounts_id svc_loans_id]
+2026-09-17T23:32:55.912-0300 [DEBUG] command: asking for input: "var.cp_credit_cards_id"
+[0m[1mvar.cp_credit_cards_id[0m
+  [1mEnter a value:[0m [0m

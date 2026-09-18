@@ -1,0 +1,39 @@
+openapi: 3.0.0
+info:
+  title: Accounts API
+  version: 1.0.0
+  description: Core Banking API for retrieving account details.
+servers:
+  - url: https://api.fintechglobal.com/v1
+paths:
+  /accounts:
+    get:
+      summary: List all accounts for the authenticated user
+      responses:
+        '200':
+          description: A list of accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    accountId:
+                      type: string
+                    balance:
+                      type: number
+                    currency:
+                      type: string
+  /accounts/{accountId}:
+    get:
+      summary: Get details of a specific account
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Account details

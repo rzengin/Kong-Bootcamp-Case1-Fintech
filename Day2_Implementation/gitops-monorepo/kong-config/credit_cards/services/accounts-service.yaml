@@ -1,0 +1,64 @@
+_format_version: "3.0"
+_info:
+  select_tags:
+    - credit_cards
+
+# Declaración de servicios para Credit Cards
+services:
+  - name: credit-card-accounts-service
+    url: http://cc-accounts-svc.default.svc.cluster.local:8080
+    routes:
+      - name: cc-accounts-route
+        paths:
+          - /v1/credit-cards/accounts
+        plugins:
+          - name: openid-connect
+            config:
+              issuer: http://localhost:8080/realms/kong
+              client_id:
+                - fintech-partners
+              auth_methods:
+                - bearer
+          - name: rate-limiting-advanced
+            config:
+              limit:
+                - 1000
+              window_size:
+                - 60
+              identifier: consumer
+          - name: proxy-cache-advanced
+            config:
+              strategy: memory
+              cache_ttl: 60
+          - name: request-transformer-advanced
+            config:
+              add:
+                headers:
+                  - x-fintech-correlation-id:generated
+          - name: canary
+            config:
+              percentage: 10
+              upstream_host: cc-accounts-svc-v2.default.svc.cluster.local
+
+  - name: cc-fraud-ai-service
+    url: http://localhost:32000 # Dummy URL for AI Proxy
+    routes:
+      - name: cc-fraud-ai-route
+        paths:
+          - /v1/credit-cards/ai/fraud-analysis
+        plugins:
+          - name: ai-proxy
+            config:
+              route_type: "llm/v1/chat"
+              model:
+                provider: openai
+                name: gpt-4
+              auth:
+                header_name: Authorization
+                header_value: Bearer ${env:OPENAI_API_KEY}
+          - name: ai-prompt-guard
+            config:
+              match_all_roles: true
+              allow_patterns: []
+              deny_patterns:
+                - "(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\\d{3})\\d{11})"

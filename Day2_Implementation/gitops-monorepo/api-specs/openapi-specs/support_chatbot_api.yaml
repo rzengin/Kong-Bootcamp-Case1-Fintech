@@ -1,0 +1,47 @@
+openapi: 3.0.0
+info:
+  title: Customer Support Chatbot API
+  version: 1.0.0
+  description: AI Gateway endpoint routing to OpenAI.
+servers:
+  - url: https://api.fintechglobal.com/v1
+paths:
+  /ai/support-chat:
+    post:
+      summary: Send a prompt to the AI support chatbot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                      content:
+                        type: string
+      responses:
+        '200':
+          description: AI response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  choices:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: object
+                          properties:
+                            role:
+                              type: string
+                            content:
+                              type: string

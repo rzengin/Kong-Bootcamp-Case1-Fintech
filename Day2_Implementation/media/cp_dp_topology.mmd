@@ -1,0 +1,27 @@
+flowchart TD
+    %% Kong Konnect SaaS (Control Planes)
+    subgraph CP [Kong Konnect SaaS Global Org]
+        CP1["Credit Cards Control Plane"]
+        CP2["Loans Control Plane"]
+        CP3["Personal Banking Control Plane"]
+    end
+
+    %% Kubernetes Data Planes (AWS EKS)
+    subgraph KDP_EKS [AWS EKS Data Planes Cloud]
+        DP_CC["DP: Credit Cards APIs"]
+        DP_Loans["DP: Loans APIs"]
+        DP_PB["DP: Personal Banking APIs"]
+        DP_AI["DP: AI Gateway 2.0 (Dedicated)"]
+    end
+
+    %% On-Premise Data Plane (Legacy Core)
+    subgraph KDP_OnPrem [On-Premise Data Plane Datacenter]
+        DP_Core["DP: Core Banking APIs"]
+    end
+
+    %% Relationships (Konnect CP to Hybrid DPs)
+    CP1 -->|mTLS Sync| DP_CC
+    CP1 -->|mTLS Sync| DP_AI
+    CP2 -->|mTLS Sync| DP_Loans
+    CP3 -->|mTLS Sync| DP_PB
+    CP3 -->|mTLS Sync| DP_Core

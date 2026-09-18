@@ -1,0 +1,33 @@
+name: Enterprise Deploy Kong Config (Monorepo)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Day2_Implementation/gitops-monorepo/**'
+
+jobs:
+  validate-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install decK
+        run: |
+          curl -sL https://github.com/Kong/deck/releases/download/v1.37.0/deck_1.37.0_linux_amd64.tar.gz -o deck.tar.gz
+          tar -xf deck.tar.gz -C /tmp
+          sudo cp /tmp/deck /usr/local/bin/
+
+      - name: Make scripts executable
+        run: chmod +x Day2_Implementation/gitops-monorepo/scripts/*.sh
+
+      - name: Validate Configurations & OpenAPI Specs
+        run: ./Day2_Implementation/gitops-monorepo/scripts/validate.sh
+
+      - name: Diff and Apply configurations per BU
+        if: github.ref == 'refs/heads/main'
+        env:
+          KONNECT_TOKEN: ${{ secrets.KONNECT_TOKEN }}
+        run: ./Day2_Implementation/gitops-monorepo/scripts/diff-and-apply.sh

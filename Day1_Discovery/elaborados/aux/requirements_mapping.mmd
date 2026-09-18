@@ -1,0 +1,26 @@
+graph LR
+    subgraph Requirements [Business & Technical Requirements]
+        direction TB
+        R1[Decentralized Autonomy per BU]
+        R2[Zero-Trust Security & PII Protection]
+        R3[High Performance & Traffic Isolation]
+        R4[Scalability: 10M Tx/Mo & 1M AI/Mo]
+    end
+
+    subgraph Decisions [Architectural Decisions]
+        direction TB
+        D1[Konnect SaaS Control Plane & GitOps CI/CD]
+        D2[OIDC Plugin, ai-proxy & ai-prompt-guard]
+        D3[5 Isolated Data Planes 4 Standard + 1 AI]
+        D4[DB-less Mode on EKS with HPA Auto-scaling]
+    end
+
+    R1 -->|Solved by| D1
+    R2 -->|Solved by| D2
+    R3 -->|Solved by| D3
+    R4 -->|Solved by| D4
+
+    classDef req fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+    classDef dec fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    class R1,R2,R3,R4 req;
+    class D1,D2,D3,D4 dec;

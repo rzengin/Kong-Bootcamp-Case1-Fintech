@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  title: Internal Fraud Analysis API
+  version: 1.0.0
+  description: AI Gateway endpoint routing to a local Llama model for fraud scoring.
+servers:
+  - url: https://api.fintechglobal.com/v1
+paths:
+  /ai/fraud-score:
+    post:
+      summary: Request a fraud analysis score for a transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                transactionData:
+                  type: string
+                  description: Stringified transaction details to be analyzed by the LLM
+      responses:
+        '200':
+          description: Fraud analysis result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fraudScore:
+                    type: integer
+                  explanation:
+                    type: string

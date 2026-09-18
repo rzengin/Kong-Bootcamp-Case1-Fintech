@@ -1,0 +1,210 @@
+# Maturity: beta
+
+ai_gateways:
+  - ref: my-resource
+    models:
+      - ref: my-resource
+        name: support-gpt
+        display_name: Support GPT
+        enabled: true
+        # access:
+          # acls:
+            # oneOf option: allow
+            # allow:
+              # - consumer-group
+            # oneOf option: deny
+            # deny:
+              # - consumer-group
+          # identity_providers:
+            # - identity-provider-name
+        formats:
+          - type: openai
+        targets:
+          - name: gpt-4o
+            provider: existing-provider-name
+            config:
+              # embeddings_dimensions: 1
+              # max_tokens: 1
+              # input_cost: 1
+              # output_cost: 1
+              # cache_read_cost: 1
+              # cache_write_cost: 1
+              # cache_write_cost_list:
+                # - ttl: value
+                  # cost: 1
+              # context_window_factor:
+                # - above: value
+                  # input_factor: 1
+                  # output_factor: 1
+              # service_tier_factor:
+                # - tier: value
+                  # factor: 1
+              # temperature: 1
+              # top_k: 1
+              # top_p: 1
+              # oneOf option: type=anthropic
+              # upstream_url: value
+              version: v1.0.0
+              type: anthropic
+              # oneOf option: type=azure
+              # upstream_url: value
+              # deployment_id: value
+              # api_version: value
+              # foundry_path_prefix: value
+              # type: azure
+              # oneOf option: type=bedrock
+              # upstream_url: value
+              # region: value
+              # batch_bucket_prefix: value
+              # embeddings_normalize: false
+              # performance_config_latency: value
+              # video_output_s3_uri: value
+              # type: bedrock
+              # oneOf option: type=cerebras
+              # upstream_url: value
+              # type: cerebras
+              # oneOf option: type=cohere
+              # upstream_url: value
+              # api_version: value
+              # embedding_input_type: value
+              # wait_for_model: false
+              # type: cohere
+              # oneOf option: type=dashscope
+              # upstream_url: value
+              # international: false
+              # type: dashscope
+              # oneOf option: type=databricks
+              # upstream_url: value
+              # workspace_instance_id: value
+              # type: databricks
+              # oneOf option: type=deepseek
+              # upstream_url: value
+              # type: deepseek
+              # oneOf option: type=gemini
+              # upstream_url: value
+              # gcp_environment:
+                # api_endpoint: value
+                # location_id: value
+                # project_id: value
+              # type: gemini
+              # oneOf option: type=huggingface
+              # upstream_url: value
+              # use_cache: false
+              # wait_for_model: false
+              # type: huggingface
+              # oneOf option: type=kimi
+              # upstream_url: value
+              # international: false
+              # type: kimi
+              # oneOf option: type=llama2
+              # upstream_url: value
+              # format: value
+              # type: llama2
+              # oneOf option: type=mistral
+              # upstream_url: value
+              # format: value
+              # type: mistral
+              # oneOf option: type=ollama
+              # upstream_url: value
+              # type: ollama
+              # oneOf option: type=openai
+              # upstream_url: value
+              # type: openai
+              # oneOf option: type=sagemaker
+              # upstream_url: value
+              # aws:
+                # region: value
+                # assume_role_arn: value
+                # role_session_name: value
+                # sts_endpoint_url: value
+              # target:
+                # model: value
+                # variant: value
+                # container_hostname: value
+              # type: sagemaker
+              # oneOf option: type=vercel
+              # upstream_url: value
+              # type: vercel
+              # oneOf option: type=vllm
+              # upstream_url: value
+              # type: vllm
+              # oneOf option: type=xai
+              # upstream_url: value
+              # type: xai
+            # weight: 100
+            # semantic_description: Primary target
+            # allow_auth_override: false
+        # policies:
+          # - policy-name
+        # labels: {}
+        # managed_by: {}
+        capabilities:
+          - generate
+        # oneOf option: type=model
+        config:
+          route:
+            # headers: {}
+            # hosts:
+              # - api.example.com
+            # https_redirect_status_code: 426
+            # methods:
+              # - POST
+            # paths:
+              # - /v1/chat/completions
+            # preserve_host: false
+            # protocols:
+              # - https
+            # regex_priority: 0
+            # request_buffering: true
+            # response_buffering: true
+            # strip_path: true
+            # tags:
+              # - ai-gateway
+            model:
+              body_param: model
+              # header_param: X-Model
+              # path_param: model
+              values:
+                - support-gpt
+          # logging:
+            # payloads: false
+          # response_streaming: allow
+          # max_request_body_size: 8388608
+          # balancer: {}
+          # proxy: {}
+          # model:
+            # name_header: true
+        type: model
+        # oneOf option: type=api
+        # config:
+          # route:
+            # headers: {}
+            # hosts:
+              # - api.example.com
+            # https_redirect_status_code: 426
+            # methods:
+              # - POST
+            # paths:
+              # - /v1/chat/completions
+            # preserve_host: false
+            # protocols:
+              # - https
+            # regex_priority: 0
+            # request_buffering: true
+            # response_buffering: true
+            # strip_path: true
+            # tags:
+              # - ai-gateway
+            # model:
+              # body_param: model
+              # header_param: X-Model
+              # path_param: model
+              # values:
+                # - support-gpt
+          # logging:
+            # payloads: false
+          # response_streaming: allow
+          # max_request_body_size: 8388608
+          # balancer: {}
+          # proxy: {}
+        # type: api

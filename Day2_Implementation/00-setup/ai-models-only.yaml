@@ -1,0 +1,50 @@
+ai_gateway_model_providers:
+  - ref: openai-provider-1
+    name: openai-provider
+    display_name: OpenAI Provider
+    type: openai
+    ai_gateway: rze-ai-gateway-2-0
+    config:
+      auth:
+        type: basic
+        headers:
+          - name: Authorization
+            value: !secret {parts: ["Bearer ", !env OPENAI_API_KEY]}
+
+ai_gateway_policies:
+  - ref: my-prompt-guard-1
+    name: my-prompt-guard
+    display_name: Prompt Guard
+    type: ai-prompt-guard
+    ai_gateway: rze-ai-gateway-2-0
+    enabled: true
+    global: false
+    config:
+      deny_patterns:
+        - "(?i)password"
+
+ai_gateway_models:
+  - ref: gpt-4o-1
+    name: gpt-4o
+    display_name: GPT-4o
+    ai_gateway: rze-ai-gateway-2-0
+    enabled: true
+    formats:
+      - type: openai
+    targets:
+      - name: gpt-4o
+        provider: openai-provider
+        config:
+          type: openai
+    capabilities:
+      - generate
+    type: model
+    policies:
+      - my-prompt-guard
+    config:
+      route:
+        methods:
+          - POST
+        paths:
+          - /ai/chat
+        strip_path: true

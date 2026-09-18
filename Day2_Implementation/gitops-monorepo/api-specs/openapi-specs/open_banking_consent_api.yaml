@@ -1,0 +1,39 @@
+openapi: 3.0.0
+info:
+  title: Open Banking Consent API
+  version: 1.0.0
+  description: API for managing customer consent for third-party access.
+servers:
+  - url: https://api.fintechglobal.com/v1
+paths:
+  /consent:
+    post:
+      summary: Create a consent record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                thirdPartyId:
+                  type: string
+                scopes:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Consent granted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  consentId:
+                    type: string
+                  expiresAt:
+                    type: string
+                    format: date-time

@@ -1,0 +1,15 @@
+_format_version: "3.0"
+plugins:
+  - name: opentelemetry
+    config:
+      endpoint: ${{ env "DECK_SIGNOZ_ENDPOINT" }}
+      resource_attributes:
+        service.name: kong-api-gateway
+        deployment.environment: workshop
+services:
+  - name: loans-service
+    url: http://httpbin.default.svc.cluster.local:8080/anything
+    routes:
+      - name: loans-route
+        paths:
+          - /loans
