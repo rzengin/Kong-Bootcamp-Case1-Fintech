@@ -10,6 +10,8 @@ env:
   trusted_ips: "0.0.0.0/0,::/0"
   real_ip_header: "X-Forwarded-For"
   real_ip_recursive: "on"
+  tracing_instrumentations: "all"
+  tracing_sampling_rate: "1.0"
 
 secretVolumes:
   - kong-cluster-cert

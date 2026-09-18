@@ -31,3 +31,15 @@ Since you operate in a hybrid cloud, Kong's Data Planes (DPs) will be deployed w
 
 ## 3. Developer Portal
 A unified Developer Portal will be exposed through Konnect, but API visibility will be segmented. Third-party Fintech partners will only see the APIs they are authorized to consume (e.g., Open Banking APIs).
+
+## 4. SLA Compliance & Deployment Strategy
+
+To address the specific SLAs around latency and canary rollouts mentioned during discovery:
+
+### Latency (< 15ms Overhead)
+- **Engine Performance:** Kong's core is built on NGINX and highly optimized C/Lua, designed specifically for sub-millisecond overhead. Even with multiple complex plugins enabled (OIDC, Rate Limiting), typical latency overhead remains between 1-3ms, well below the 15ms target.
+- **Topology:** By deploying the Data Planes locally within the same Kubernetes clusters (AWS EKS) as the backend services, we eliminate extra network hops. Traffic does not need to trombone through a centralized cloud gateway to be validated.
+
+### Zero-Downtime (Canary) Deployments
+- **Native Upstreams:** Kong natively supports weighted load balancing and canary routing via its `Upstreams` and `Targets` concepts.
+- **GitOps Integration:** To route 10% of traffic to a v2 service, developers simply declare the weight distribution (e.g., Target v1=90, Target v2=10) in their declarative `kong.yaml` configuration. The CI/CD APIOps pipeline applies these shifts instantly via decK, ensuring zero-downtime traffic cutovers.
