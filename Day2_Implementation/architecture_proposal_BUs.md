@@ -43,3 +43,14 @@ To address the specific SLAs around latency and canary rollouts mentioned during
 ### Zero-Downtime (Canary) Deployments
 - **Native Upstreams:** Kong natively supports weighted load balancing and canary routing via its `Upstreams` and `Targets` concepts.
 - **GitOps Integration:** To route 10% of traffic to a v2 service, developers simply declare the weight distribution (e.g., Target v1=90, Target v2=10) in their declarative `kong.yaml` configuration. The CI/CD APIOps pipeline applies these shifts instantly via decK, ensuring zero-downtime traffic cutovers.
+
+## 5. AI Gateway & Token Observability
+
+To address the specific requirement of **Tracking LLM Token Usage and Costs** across your internal platforms:
+
+- **AI Analytics Dashboard:** We will leverage the out-of-the-box **AI Analytics** dashboard located within Konnect's **Observability** module.
+- **Out-of-the-Box Metrics:** By routing all LLM traffic through the dedicated AI Gateway Data Plane, Kong natively parses the payloads and automatically tracks:
+  - Total tokens consumed (prompt and completion tokens).
+  - Estimated costs per provider (e.g., OpenAI, Anthropic).
+  - LLM-specific latency and error rates.
+This completely removes the need for developers to build custom SDK integrations to track AI consumption, providing the platform team with a centralized, unified view of AI usage across the entire bank.
